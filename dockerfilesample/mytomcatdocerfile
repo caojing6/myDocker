@@ -1,0 +1,25 @@
+#Use Ubuntu as the basic docker image, which has been downloaded from the dockerhub
+FROM ubuntu
+
+#Set Maintainer as caojing
+MAINTAINER caojing
+
+#Create /usr/local/soft dir to store the jdk and tomcat files
+RUN mkdir -p /usr/local/soft
+
+#Copy jdk and tomcat from local to the docker image
+ADD jdk8 /usr/local/soft/jdk8
+ADD tomcat /usr/local/soft/tomcat
+
+#Set environment vailables
+ENV JAVA_HOME /usr/local/soft/jdk8
+ENV CATALILNA_HOME /usr/local/soft/tomcat
+ENV PATH $PATH:$JAVA_HOME/bin:$CATALILNA_HOME/bin
+
+#WORKDIR /usr/local/soft/tomcat/bin
+
+#Expose 8080 port to the out side
+EXPOSE 8080
+
+#Start the tomcat server in the container
+CMD /usr/local/soft/tomcat/bin/startup.sh && tail -f /usr/local/soft/tomcat/logs/catalina.out
